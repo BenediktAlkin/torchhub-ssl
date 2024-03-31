@@ -15,25 +15,25 @@ VIT_CONFIGS = dict(
 )
 
 URL_CONFIS = {
-    "mae_b16": dict(
+    "in1k_mae_b16": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["b16"],
         url="https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth",
         preprocess="mae",
     ),
-    "mae_l16": dict(
+    "in1k_mae_l16": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["l16"],
         url="https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_large.pth",
         preprocess="mae",
     ),
-    "mae_h14": dict(
+    "in1k_mae_h14": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["h14"],
         url="https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_huge.pth",
         preprocess="mae",
     ),
-    "mae_twob14": dict(
+    "in1k_mae_twob14": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["twob14"],
         url="https://dl.fbaipublicfiles.com/maws/pretrain/mae_in1k/vit_2b14.pt",
@@ -43,21 +43,21 @@ URL_CONFIS = {
 
 TORCHHUB_CONFIGS = {
     # MIM-Refiner
-    "mae_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_l16"),
-    "mae_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_h14"),
-    "mae_twob14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_twob14"),
-    "d2v2_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_l16"),
-    "d2v2_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_h14"),
+    "in1k_mae_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_l16"),
+    "in1k_mae_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_h14"),
+    "in1k_mae_twob14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_twob14"),
+    "in1k_d2v2_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_l16"),
+    "in1k_d2v2_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_h14"),
     # DINOv2
-    "dinov2_vits14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vits14"),
-    "dinov2_vitb14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitb14"),
-    "dinov2_vitl14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitl14"),
-    "dinov2_vitg14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitg14"),
+    "lvd142m_dinov2_vits14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vits14"),
+    "lvd142m_dinov2_vitb14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitb14"),
+    "lvd142m_dinov2_vitl14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitl14"),
+    "lvd142m_dinov2_vitg14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitg14"),
     # DINOv2 with registers
-    "dinov2_vits14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vits14_reg"),
-    "dinov2_vitb14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitb14_reg"),
-    "dinov2_vitl14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitl14_reg"),
-    "dinov2_vitg14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitg14_reg"),
+    "lvd142m_dinov2_vits14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vits14_reg"),
+    "lvd142m_dinov2_vitb14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitb14_reg"),
+    "lvd142m_dinov2_vitl14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitl14_reg"),
+    "lvd142m_dinov2_vitg14_reg": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitg14_reg"),
 }
 
 
