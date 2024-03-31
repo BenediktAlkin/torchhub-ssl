@@ -7,6 +7,7 @@ from models.prenorm_vit import PrenormVit
 dependencies = ["torch", "kappamodules", "einops"]
 
 VIT_CONFIGS = dict(
+    s16=dict(patch_size=16, dim=384, depth=12, num_heads=6),
     b8=dict(patch_size=8, dim=768, depth=12, num_heads=12),
     b16=dict(patch_size=16, dim=768, depth=12, num_heads=12),
     l16=dict(patch_size=16, dim=1024, depth=24, num_heads=16),
@@ -15,6 +16,7 @@ VIT_CONFIGS = dict(
 )
 
 URL_CONFIS = {
+    # MAE
     "in1k_mae_b16": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["b16"],
@@ -38,6 +40,25 @@ URL_CONFIS = {
         ctor_kwargs=VIT_CONFIGS["twob14"],
         url="https://dl.fbaipublicfiles.com/maws/pretrain/mae_in1k/vit_2b14.pt",
         preprocess="mae",
+    ),
+    # MUGS
+    "in1k_mugs_s16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s16"],
+        url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_small_800ep/vit_small_backbone_800ep.pth",
+        preprocess="mugs",
+    ),
+    "in1k_mugs_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s16"],
+        url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_base_400ep/vit_base_backbone_400ep.pth",
+        preprocess="mugs",
+    ),
+    "in1k_mugs_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s16"],
+        url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_large_250ep/vit_large_backbone_250ep.pth",
+        preprocess="mugs",
     ),
 }
 
@@ -75,6 +96,20 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, **kwargs):
         sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = sd.pop("cls_token")
+    elif preprocess == "mugs":
+        sd = sd["state_dict"]
+        # Mugs uses flat patch_embed with pos_embed for CLS token != 0, i.e. shape=(1, 197, dim)
+        # convert to kappamodules format (retain spatial dimensions and include pos_embed into CLS) -> (1, 14, 14, dim)
+        assert "pos_embed" in sd
+        assert "cls_token" in sd
+        pos_embed = sd.pop("pos_embed")
+        cls_token = sd.pop("cls_token") + pos_embed[:, :1]
+        pos_embed = pos_embed[:, 1:]
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+        # kappamodules has different key for CLS token
+        sd["cls_tokens.tokens"] = cls_token
+        # remove relation_blocks
+        sd = {key: value for key, value in sd.items() if not key.startswith("relation_blocks")}
     else:
         raise NotImplementedError
 

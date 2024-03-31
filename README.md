@@ -19,7 +19,10 @@ ImageNet-1K pre-trained:
 - MoCo-v3 (TODO)
 - DINO (TODO)
 - iBOT (TODO)
-- Mugs (TODO)
+- [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
+  - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_s16")`
+  - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_b16")`
+  - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_l16")`
 
 # ImageNet-21K
 
@@ -51,3 +54,4 @@ Sources for the checkpoints are from the corresponding repositories:
 - [MAWS](https://github.com/facebookresearch/maws)
 - [data2vec 2.0](https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec)
 - [DINOv2](https://github.com/facebookresearch/dinov2)
+- [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
