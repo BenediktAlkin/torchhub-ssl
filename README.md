@@ -17,12 +17,16 @@ ImageNet-1K pre-trained:
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_l16_refined")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_h14_refined")`
 - MoCo-v3 (TODO)
-- DINO (TODO)
+- DINO
+    - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s16")`
+    - ViT-S/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s8")`
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_b16")`
+    - ViT-B/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_b8")`
 - iBOT (TODO)
 - [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
-  - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_s16")`
-  - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_b16")`
-  - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_l16")`
+    - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_s16")`
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_l16")`
 
 # ImageNet-21K
 

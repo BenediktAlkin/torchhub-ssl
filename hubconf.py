@@ -8,8 +8,9 @@ dependencies = ["torch", "kappamodules", "einops"]
 
 VIT_CONFIGS = dict(
     s16=dict(patch_size=16, dim=384, depth=12, num_heads=6),
-    b8=dict(patch_size=8, dim=768, depth=12, num_heads=12),
+    s8=dict(patch_size=8, dim=384, depth=12, num_heads=6),
     b16=dict(patch_size=16, dim=768, depth=12, num_heads=12),
+    b8=dict(patch_size=8, dim=768, depth=12, num_heads=12),
     l16=dict(patch_size=16, dim=1024, depth=24, num_heads=16),
     h14=dict(patch_size=14, dim=1280, depth=32, num_heads=16),
     twob14=dict(patch_size=14, dim=2560, depth=24, num_heads=32),
@@ -59,6 +60,31 @@ URL_CONFIS = {
         ctor_kwargs=VIT_CONFIGS["l16"],
         url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_large_250ep/vit_large_backbone_250ep.pth",
         preprocess="mugs",
+    ),
+    # DINO
+    "in1k_dino_s16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s16"],
+        url="https://dl.fbaipublicfiles.com/dino/dino_deitsmall16_pretrain/dino_deitsmall16_pretrain.pth",
+        preprocess="dino",
+    ),
+    "in1k_dino_s8": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s8"],
+        url="https://dl.fbaipublicfiles.com/dino/dino_deitsmall8_pretrain/dino_deitsmall8_pretrain.pth",
+        preprocess="dino",
+    ),
+    "in1k_dino_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["b16"],
+        url="https://dl.fbaipublicfiles.com/dino/dino_vitbase16_pretrain/dino_vitbase16_pretrain.pth",
+        preprocess="dino",
+    ),
+    "in1k_dino_b8": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["b8"],
+        url="https://dl.fbaipublicfiles.com/dino/dino_vitbase8_pretrain/dino_vitbase8_pretrain.pth",
+        preprocess="dino",
     ),
 }
 
@@ -110,6 +136,17 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, **kwargs):
         sd["cls_tokens.tokens"] = cls_token
         # remove relation_blocks
         sd = {key: value for key, value in sd.items() if not key.startswith("relation_blocks")}
+    elif preprocess == "dino":
+        # DINO uses flat patch_embed with pos_embed for CLS token != 0, i.e. shape=(1, 197, dim)
+        # convert to kappamodules format (retain spatial dimensions and include pos_embed into CLS) -> (1, 14, 14, dim)
+        assert "pos_embed" in sd
+        assert "cls_token" in sd
+        pos_embed = sd.pop("pos_embed")
+        cls_token = sd.pop("cls_token") + pos_embed[:, :1]
+        pos_embed = pos_embed[:, 1:]
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+        # kappamodules has different key for CLS token
+        sd["cls_tokens.tokens"] = cls_token
     else:
         raise NotImplementedError
 
