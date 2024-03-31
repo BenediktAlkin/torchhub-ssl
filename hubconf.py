@@ -50,13 +50,13 @@ URL_CONFIS = {
     ),
     "in1k_mugs_b16": dict(
         ctor=PrenormVit,
-        ctor_kwargs=VIT_CONFIGS["s16"],
+        ctor_kwargs=VIT_CONFIGS["b16"],
         url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_base_400ep/vit_base_backbone_400ep.pth",
         preprocess="mugs",
     ),
     "in1k_mugs_l16": dict(
         ctor=PrenormVit,
-        ctor_kwargs=VIT_CONFIGS["s16"],
+        ctor_kwargs=VIT_CONFIGS["l16"],
         url="https://huggingface.co/zhoupans/Mugs/resolve/main/pretrained%20models/vit_large_250ep/vit_large_backbone_250ep.pth",
         preprocess="mugs",
     ),
