@@ -2,6 +2,7 @@
 
 This repository provides an interface to load models from publicly available checkpoints.
 
+
 ImageNet-1K pre-trained:
 
 - [MAE](https://github.com/facebookresearch/mae#fine-tuning-with-pre-trained-checkpoints)
@@ -51,6 +52,16 @@ ImageNet-1K pre-trained:
 - [MAE](https://github.com/facebookresearch/maws)
     - TODO
 
+# Infos
+
+Old models that have public implementations without [FlashAttention](https://arxiv.org/abs/2205.14135)
+are ported to an implementation that uses FlashAttention in the form of pytorchs 
+[`scaled_dot_product_attention`](https://pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html) 
+(requires `torch >= 2.0`).
+
+
+# Sources
+
 Sources for the checkpoints are from the corresponding repositories:
 
 - [MAE](https://github.com/facebookresearch/mae#fine-tuning-with-pre-trained-checkpoints)
@@ -59,3 +70,4 @@ Sources for the checkpoints are from the corresponding repositories:
 - [data2vec 2.0](https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec)
 - [DINOv2](https://github.com/facebookresearch/dinov2)
 - [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
+- [DINO](https://github.com/facebookresearch/dino#pretrained-models)
