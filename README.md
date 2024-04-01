@@ -17,22 +17,20 @@ ImageNet-1K pre-trained:
 - [data2vec 2.0 refined (MIM-Refiner)](https://github.com/ml-jku/MIM-Refiner#pre-trained-models)
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_l16_refined")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_h14_refined")`
-- MoCo-v3 (TODO)
 - DINO
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s16")`
     - ViT-S/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s8")`
     - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_b16")`
     - ViT-B/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_b8")`
-- iBOT (TODO)
+- iBOT
+    - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ibot_s16")`
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ibot_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ibot_l16")`
 - [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_s16")`
     - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_b16")`
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_l16")`
 
-# ImageNet-21K
-
-- iBOT (TODO)
-- I-JEPA (TODO)
 
 # LVD-142M pre-trained (dataset from DINOv2)
 
@@ -47,10 +45,6 @@ ImageNet-1K pre-trained:
     - ViT-L/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "lvd142M_dinov2_vitl14_reg")`
     - ViT-g/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "lvd142M_dinov2_vitg14_reg")`
 
-# IG-3B pre-trained
-
-- [MAE](https://github.com/facebookresearch/maws)
-    - TODO
 
 # Infos
 
@@ -71,3 +65,4 @@ Sources for the checkpoints are from the corresponding repositories:
 - [DINOv2](https://github.com/facebookresearch/dinov2)
 - [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
 - [DINO](https://github.com/facebookresearch/dino#pretrained-models)
+- [iBOT](https://github.com/bytedance/ibot#pre-trained-models)

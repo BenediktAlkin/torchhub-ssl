@@ -3,6 +3,7 @@ from functools import partial
 import torch
 
 from models.prenorm_vit import PrenormVit
+from models.postnorm_vit import PostnormVit
 
 dependencies = ["torch", "kappamodules", "einops"]
 
@@ -86,6 +87,47 @@ URL_CONFIS = {
         url="https://dl.fbaipublicfiles.com/dino/dino_vitbase8_pretrain/dino_vitbase8_pretrain.pth",
         preprocess="dino",
     ),
+    # iBOT
+    "in1k_ibot_s16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["s16"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vits_16/checkpoint_teacher.pth",
+        file_name="in1k_ibot_s16_teacher.pth",
+        preprocess="ibot",
+    ),
+    "in1k_ibot_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["b16"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vitb_16_rand_mask/checkpoint_teacher.pth",
+        file_name="in1k_ibot_b16_teacher.pth",
+        preprocess="ibot",
+    ),
+    "in1k_ibot_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["l16"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vitl_16_rand_mask/checkpoint_teacher.pth",
+        file_name="in1k_ibot_l16_teacher.pth",
+        preprocess="ibot",
+    ),
+    # data2vec 2.0
+    "in1k_d2v2_b16": dict(
+        ctor=PostnormVit,
+        ctor_kwargs=VIT_CONFIGS["b16"],
+        url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/base_imagenet.pt",
+        preprocess="d2v2",
+    ),
+    "in1k_d2v2_l16": dict(
+        ctor=PostnormVit,
+        ctor_kwargs=VIT_CONFIGS["l16"],
+        url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/large_imagenet.pt",
+        preprocess="d2v2",
+    ),
+    "in1k_d2v2_h14": dict(
+        ctor=PostnormVit,
+        ctor_kwargs=VIT_CONFIGS["h14"],
+        url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/huge_imagenet.pt",
+        preprocess="d2v2",
+    ),
 }
 
 TORCHHUB_CONFIGS = {
@@ -108,9 +150,9 @@ TORCHHUB_CONFIGS = {
 }
 
 
-def load_from_url(ctor, ctor_kwargs, url, preprocess, **kwargs):
+def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
     model = ctor(**ctor_kwargs, **kwargs)
-    sd = torch.hub.load_state_dict_from_url(url, map_location="cpu")
+    sd = torch.hub.load_state_dict_from_url(url, map_location="cpu", file_name=file_name)
     if preprocess == "mae":
         sd = sd["model"]
         # MAE uses flat patch_embed with 0s for CLS token, i.e. shape=(1, 197, dim)
@@ -147,6 +189,27 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, **kwargs):
         sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = cls_token
+    elif preprocess == "ibot":
+        sd = sd["state_dict"]
+        # iBOT uses flat patch_embed with pos_embed for CLS token != 0, i.e. shape=(1, 197, dim)
+        # convert to kappamodules format (retain spatial dimensions and include pos_embed into CLS) -> (1, 14, 14, dim)
+        assert "pos_embed" in sd
+        assert "cls_token" in sd
+        pos_embed = sd.pop("pos_embed")
+        cls_token = sd.pop("cls_token") + pos_embed[:, :1]
+        pos_embed = pos_embed[:, 1:]
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+        # kappamodules has different key for CLS token
+        sd["cls_tokens.tokens"] = cls_token
+    elif preprocess == "d2v2":
+        sd["patch_embed.proj.weight"] = sd.pop("modality_encoders.IMAGE.local_encoder.proj.weight")
+        sd["patch_embed.proj.bias"] = sd.pop("modality_encoders.IMAGE.local_encoder.proj.bias")
+        sd["cls_tokens.tokens"] = sd.pop("modality_encoders.IMAGE.extra_tokens")
+        sd["pos_embed.embed"] = sd.pop("modality_encoders.IMAGE.fixed_positional_encoder.positions")
+        sd["embed_norm.weight"] = sd.pop("modality_encoders.IMAGE.context_encoder.norm.weight")
+        sd["embed_norm.bias"] = sd.pop("modality_encoders.IMAGE.context_encoder.norm.bias")
+        sd = {k: v for k, v in sd.items() if "decoder" not in k}
+        sd.pop("_ema", None)
     else:
         raise NotImplementedError
 
