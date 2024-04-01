@@ -49,7 +49,7 @@ ImageNet-1K pre-trained:
 # Infos
 
 Old models that have public implementations without [FlashAttention](https://arxiv.org/abs/2205.14135)
-are ported to an implementation that uses FlashAttention in the form of pytorchs 
+are ported to an implementation that uses FlashAttention in the form of
 [`scaled_dot_product_attention`](https://pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html) 
 (requires `torch >= 2.0`).
 
