@@ -67,24 +67,28 @@ URL_CONFIS = {
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["s16"],
         url="https://dl.fbaipublicfiles.com/dino/dino_deitsmall16_pretrain/dino_deitsmall16_pretrain.pth",
+        file_name="in1k_dino_s16.pt",
         preprocess="dino",
     ),
     "in1k_dino_s8": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["s8"],
         url="https://dl.fbaipublicfiles.com/dino/dino_deitsmall8_pretrain/dino_deitsmall8_pretrain.pth",
+        file_name="in1k_dino_s8.pt",
         preprocess="dino",
     ),
     "in1k_dino_b16": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["b16"],
         url="https://dl.fbaipublicfiles.com/dino/dino_vitbase16_pretrain/dino_vitbase16_pretrain.pth",
+        file_name="in1k_dino_b16.pt",
         preprocess="dino",
     ),
     "in1k_dino_b8": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["b8"],
         url="https://dl.fbaipublicfiles.com/dino/dino_vitbase8_pretrain/dino_vitbase8_pretrain.pth",
+        file_name="in1k_dino_b8.pt",
         preprocess="dino",
     ),
     # iBOT
@@ -114,18 +118,21 @@ URL_CONFIS = {
         ctor=PostnormVit,
         ctor_kwargs=VIT_CONFIGS["b16"],
         url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/base_imagenet.pt",
+        file_name="in1k_d2v2_b16.pt",
         preprocess="d2v2",
     ),
     "in1k_d2v2_l16": dict(
         ctor=PostnormVit,
         ctor_kwargs=VIT_CONFIGS["l16"],
         url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/large_imagenet.pt",
+        file_name="in1k_d2v2_l16.pt",
         preprocess="d2v2",
     ),
     "in1k_d2v2_h14": dict(
         ctor=PostnormVit,
         ctor_kwargs=VIT_CONFIGS["h14"],
         url="https://dl.fbaipublicfiles.com/fairseq/data2vec2/huge_imagenet.pt",
+        file_name="in1k_d2v2_h14.pt",
         preprocess="d2v2",
     ),
 }
@@ -202,10 +209,12 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = cls_token
     elif preprocess == "d2v2":
+        sd = sd["model"]
         sd["patch_embed.proj.weight"] = sd.pop("modality_encoders.IMAGE.local_encoder.proj.weight")
         sd["patch_embed.proj.bias"] = sd.pop("modality_encoders.IMAGE.local_encoder.proj.bias")
         sd["cls_tokens.tokens"] = sd.pop("modality_encoders.IMAGE.extra_tokens")
-        sd["pos_embed.embed"] = sd.pop("modality_encoders.IMAGE.fixed_positional_encoder.positions")
+        pos_embed = sd.pop("modality_encoders.IMAGE.fixed_positional_encoder.positions")
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
         sd["embed_norm.weight"] = sd.pop("modality_encoders.IMAGE.context_encoder.norm.weight")
         sd["embed_norm.bias"] = sd.pop("modality_encoders.IMAGE.context_encoder.norm.bias")
         sd = {k: v for k, v in sd.items() if "decoder" not in k}
