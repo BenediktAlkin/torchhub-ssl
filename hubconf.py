@@ -41,7 +41,7 @@ URL_CONFIS = {
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["twob14"],
         url="https://dl.fbaipublicfiles.com/maws/pretrain/mae_in1k/vit_2b14.pt",
-        preprocess="mae",
+        preprocess="maws",
     ),
     # MUGS
     "in1k_mugs_s16": dict(
@@ -160,8 +160,9 @@ TORCHHUB_CONFIGS = {
 def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
     model = ctor(**ctor_kwargs, **kwargs)
     sd = torch.hub.load_state_dict_from_url(url, map_location="cpu", file_name=file_name)
-    if preprocess == "mae":
-        sd = sd["model"]
+    if preprocess in ["mae", "maws"]:
+        if preprocess == "mae":
+            sd = sd["model"]
         # MAE uses flat patch_embed with 0s for CLS token, i.e. shape=(1, 197, dim)
         # convert to kappamodules format (retain spatial dimensions and remove CLS) -> (1, 14, 14, dim)
         assert "pos_embed" in sd
