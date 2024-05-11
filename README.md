@@ -30,6 +30,10 @@ ImageNet-1K pre-trained:
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_s16")`
     - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_b16")`
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mugs_l16")`
+- [CrossMAE](https://github.com/TonyLianLong/CrossMAE?tab=readme-ov-file#models)
+    - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_s16")`
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_l16")`
 
 
 # LVD-142M pre-trained (dataset from DINOv2)
@@ -66,3 +70,4 @@ Sources for the checkpoints are from the corresponding repositories:
 - [Mugs](https://github.com/sail-sg/mugs#pretrained-models-on-imagenet-1k)
 - [DINO](https://github.com/facebookresearch/dino#pretrained-models)
 - [iBOT](https://github.com/bytedance/ibot#pre-trained-models)
+- [CrossMAE](https://github.com/TonyLianLong/CrossMAE?tab=readme-ov-file#models)

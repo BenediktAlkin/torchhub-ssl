@@ -142,6 +142,35 @@ URL_CONFIS = {
         file_name="in1k_d2v2_h14.pt",
         preprocess="d2v2",
     ),
+    # CrossMAE
+    "in1k_crossmae_s16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["s16"], use_last_norm=False),
+        url="https://huggingface.co/longlian/CrossMAE/resolve/main/vits-mr0.75-kmr0.75-dd12/imagenet-mae-cross-vits-pretrain-wfm-mr0.75-kmr0.75-dd12-ep800-ui.pth",
+        file_name="in1k_crossmae_s16",
+        preprocess="crossmae",
+    ),
+    "in1k_crossmae_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["b16"], use_last_norm=False),
+        url="https://huggingface.co/longlian/CrossMAE/resolve/main/vitb-mr0.75-kmr0.75-dd12/imagenet-mae-cross-vitb-pretrain-wfm-mr0.75-kmr0.75-dd12-ep800-ui.pth",
+        file_name="in1k_crossmae_b16",
+        preprocess="crossmae",
+    ),
+    "in1k_crossmae_b16res448": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["b16"], use_last_norm=False, input_shape=(3, 448, 448)),
+        url="https://huggingface.co/longlian/CrossMAE/resolve/main/vitb-mr0.75-kmr0.75-dd12-448-400/imagenet-mae-cross-vitb-pretrain-wfm-mr0.75-kmr0.25-dd12-ep400-ui-res-448.pth",
+        file_name="in1k_crossmae_b16res448",
+        preprocess="crossmae",
+    ),
+    "in1k_crossmae_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["l16"], use_last_norm=False),
+        url="https://huggingface.co/longlian/CrossMAE/resolve/main/vitl-mr0.75-kmr0.75-dd12/imagenet-mae-cross-vitl-pretrain-wfm-mr0.75-kmr0.75-dd12-ep800-ui.pth",
+        file_name="in1k_crossmae_l16",
+        preprocess="crossmae",
+    ),
 }
 
 TORCHHUB_CONFIGS = {
@@ -167,8 +196,8 @@ TORCHHUB_CONFIGS = {
 def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
     model = ctor(**ctor_kwargs, **kwargs)
     sd = torch.hub.load_state_dict_from_url(url, map_location="cpu", file_name=file_name)
-    if preprocess in ["mae", "maws"]:
-        if preprocess == "mae":
+    if preprocess in ["mae", "maws", "crossmae"]:
+        if preprocess in ["mae", "crossmae"]:
             sd = sd["model"]
         # MAE uses flat patch_embed with 0s for CLS token, i.e. shape=(1, 197, dim)
         # convert to kappamodules format (retain spatial dimensions and remove CLS) -> (1, 14, 14, dim)
@@ -179,6 +208,12 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = sd.pop("cls_token")
+        # remove decoder
+        if preprocess == "crossmae":
+            sd = {
+                key: value for key, value in sd.items()
+                if "decoder" not in key and "dec_" not in key and "wfm" not in key and "mask_token" not in key
+            }
     elif preprocess == "mugs":
         sd = sd["state_dict"]
         # Mugs uses flat patch_embed with pos_embed for CLS token != 0, i.e. shape=(1, 197, dim)

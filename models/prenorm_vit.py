@@ -17,6 +17,7 @@ class PrenormVit(nn.Module):
             drop_path_rate=0.,
             drop_path_decay=True,
             num_cls_tokens=1,
+            use_last_norm=True,
             eps=1e-6,
             **kwargs,
     ):
@@ -28,6 +29,7 @@ class PrenormVit(nn.Module):
         self.input_shape = input_shape
         self.drop_path_rate = drop_path_rate
         self.drop_path_decay = drop_path_decay
+        self.use_last_norm = use_last_norm
         self.eps = eps
 
         # initialize patch_embed
@@ -62,7 +64,10 @@ class PrenormVit(nn.Module):
             )
             for i in range(depth)
         ])
-        self.norm = nn.LayerNorm(dim, eps=eps)
+        if use_last_norm:
+            self.norm = nn.LayerNorm(dim, eps=eps)
+        else:
+            self.norm = nn.Identity()
 
         self.output_shape = (self.patch_embed.num_patches + self.cls_tokens.num_tokens, dim)
 
