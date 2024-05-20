@@ -13,6 +13,7 @@ VIT_CONFIGS = dict(
     b16=dict(patch_size=16, dim=768, depth=12, num_heads=12),
     b8=dict(patch_size=8, dim=768, depth=12, num_heads=12),
     l16=dict(patch_size=16, dim=1024, depth=24, num_heads=16),
+    h16=dict(patch_size=16, dim=1280, depth=32, num_heads=16),
     h14=dict(patch_size=14, dim=1280, depth=32, num_heads=16),
     twob14=dict(patch_size=14, dim=2560, depth=24, num_heads=32),
 )
@@ -171,6 +172,35 @@ URL_CONFIS = {
         file_name="in1k_crossmae_l16",
         preprocess="crossmae",
     ),
+    # MAE-CT
+    "in1k_maectaug_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["b16"],
+        url="https://ml.jku.at/research/maect/download/maectaug_base16.th",
+        file_name="in1k_maectaug_b16",
+        preprocess="maect",
+    ),
+    "in1k_maectaug_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["l16"],
+        url="https://ml.jku.at/research/maect/download/maectaug_large16.th",
+        file_name="in1k_maectaug_l16",
+        preprocess="maect",
+    ),
+    "in1k_maectaug_h16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["h16"],
+        url="https://ml.jku.at/research/maect/download/maectaug_huge16.th",
+        file_name="in1k_maectaug_h16",
+        preprocess="maect",
+    ),
+    "in1k_maect_h14": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["h14"],
+        url="https://ml.jku.at/research/maect/download/maectaug_huge14.th",
+        file_name="in1k_maectaug_h14",
+        preprocess="maect",
+    ),
 }
 
 TORCHHUB_CONFIGS = {
@@ -262,6 +292,14 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         sd["embed_norm.bias"] = sd.pop("modality_encoders.IMAGE.context_encoder.norm.bias")
         sd = {k: v for k, v in sd.items() if "decoder" not in k}
         sd.pop("_ema", None)
+    elif preprocess == "maect":
+        # MAE-CT uses flat pos_embed no entry for the CLS token, i.e. shape=(1, 196, dim)
+        # convert to kappamodules format (retain spatial dimensions and remove CLS) -> (1, 14, 14, dim)
+        assert "pos_embed" in sd
+        pos_embed = sd.pop("pos_embed")
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+        # kappamodules has different key for CLS token
+        sd["cls_tokens.tokens"] = sd.pop("cls_token")
     else:
         raise NotImplementedError
 
