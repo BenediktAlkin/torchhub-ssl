@@ -34,6 +34,11 @@ ImageNet-1K pre-trained:
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_s16")`
     - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_b16")`
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_crossmae_l16")`
+- [MAE-CT](https://github.com/ml-jku/MAE-CT?tab=readme-ov-file#mae-ctaug)
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_l16")`
+    - ViT-H/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_h16")`
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_h14")`
 
 
 # LVD-142M pre-trained (dataset from DINOv2)

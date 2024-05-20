@@ -194,7 +194,7 @@ URL_CONFIS = {
         file_name="in1k_maectaug_h16",
         preprocess="maect",
     ),
-    "in1k_maect_h14": dict(
+    "in1k_maectaug_h14": dict(
         ctor=PrenormVit,
         ctor_kwargs=VIT_CONFIGS["h14"],
         url="https://ml.jku.at/research/maect/download/maectaug_huge14.th",
