@@ -48,6 +48,28 @@ URL_CONFIS = {
         file_name="in1k_mae_twob14",
         preprocess="maws",
     ),
+    # dBOT
+    "in1k_dbot_b16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["b16"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/mmodal/dbot/84.5_dbot_base_pre.pth",
+        file_name="in1k_dbot_b16",
+        preprocess="dbot",
+    ),
+    "in1k_dbot_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["l16"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/mmodal/dbot/86.6_dbot_large_pre.pth",
+        file_name="in1k_dbot_l16",
+        preprocess="dbot",
+    ),
+    "in1k_dbot_h14": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["h14"],
+        url="https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/mmodal/dbot/87.4_dbot_huge_pre.pth",
+        file_name="in1k_dbot_h14",
+        preprocess="dbot",
+    ),
     # MUGS
     "in1k_mugs_s16": dict(
         ctor=PrenormVit,
@@ -226,8 +248,8 @@ TORCHHUB_CONFIGS = {
 def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
     model = ctor(**ctor_kwargs, **kwargs)
     sd = torch.hub.load_state_dict_from_url(url, map_location="cpu", file_name=file_name)
-    if preprocess in ["mae", "maws", "crossmae"]:
-        if preprocess in ["mae", "crossmae"]:
+    if preprocess in ["mae", "maws", "crossmae", "dbot"]:
+        if preprocess in ["mae", "crossmae", "dbot"]:
             sd = sd["model"]
         # MAE uses flat patch_embed with 0s for CLS token, i.e. shape=(1, 197, dim)
         # convert to kappamodules format (retain spatial dimensions and remove CLS) -> (1, 14, 14, dim)
@@ -239,7 +261,7 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = sd.pop("cls_token")
         # remove decoder
-        if preprocess == "crossmae":
+        if preprocess in ["crossmae", "dbot"]:
             sd = {
                 key: value for key, value in sd.items()
                 if "decoder" not in key and "dec_" not in key and "wfm" not in key and "mask_token" not in key

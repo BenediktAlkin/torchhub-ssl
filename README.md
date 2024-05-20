@@ -14,9 +14,17 @@ ImageNet-1K pre-trained:
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mae_l16_refined")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mae_h14_refined")`
     - ViT-2B/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_mae_twob14_refined")`
+- data2vec 2.0
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_l16")`
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_h14")`
 - [data2vec 2.0 refined (MIM-Refiner)](https://github.com/ml-jku/MIM-Refiner#pre-trained-models)
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_l16_refined")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_d2v2_h14_refined")`
+- [dBOT](https://github.com/liuxingbin/dbot?tab=readme-ov-file#pre-trained-and-fine-tuned-models) (student = teacher architecture)
+    - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_b16")`
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_l16")`
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_h14")`
 - DINO
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s16")`
     - ViT-S/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s8")`
