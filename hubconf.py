@@ -231,7 +231,6 @@ URL_CONFIS = {
         url="https://dl.fbaipublicfiles.com/ijepa/IN1K-vit.h.14-300e.pth.tar",
         file_name="in1k_ijepa_h14",
         preprocess="ijepa",
-        num_cls_tokens=0,
     ),
     "in1k_ijepa_h16res448": dict(
         ctor=PrenormVit,
