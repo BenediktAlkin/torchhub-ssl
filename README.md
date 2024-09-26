@@ -47,7 +47,15 @@ ImageNet-1K pre-trained:
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_l16")`
     - ViT-H/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_h16")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_maectaug_h14")`
+- [I-JEPA](https://github.com/facebookresearch/ijepa?tab=readme-ov-file#pretrained-models)
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ijepa_h14")`
+    - ViT-H/16_448 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ijepa_h16res448")`
 
+# ImageNet-21K pre-trained
+
+- [I-JEPA](https://github.com/facebookresearch/ijepa?tab=readme-ov-file#pretrained-models)
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in21k_ijepa_h14")`
+    - ViT-g/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in21k_ijepa_g16")`
 
 # LVD-142M pre-trained (dataset from DINOv2)
 

@@ -15,6 +15,7 @@ VIT_CONFIGS = dict(
     l16=dict(patch_size=16, dim=1024, depth=24, num_heads=16),
     h16=dict(patch_size=16, dim=1280, depth=32, num_heads=16),
     h14=dict(patch_size=14, dim=1280, depth=32, num_heads=16),
+    g16=dict(patch_size=16, dim=1408, depth=40, mlp_hidden_dim=6144, num_heads=16),
     twob14=dict(patch_size=14, dim=2560, depth=24, num_heads=32),
 )
 
@@ -226,11 +227,32 @@ URL_CONFIS = {
     # I-JEPA
     "in1k_ijepa_h14": dict(
         ctor=PrenormVit,
-        ctor_kwargs=VIT_CONFIGS["h14"],
+        ctor_kwargs=dict(**VIT_CONFIGS["h14"], num_cls_tokens=0),
         url="https://dl.fbaipublicfiles.com/ijepa/IN1K-vit.h.14-300e.pth.tar",
         file_name="in1k_ijepa_h14",
         preprocess="ijepa",
         num_cls_tokens=0,
+    ),
+    "in1k_ijepa_h16res448": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["h16"], num_cls_tokens=0, input_shape=(3, 448, 448)),
+        url="https://dl.fbaipublicfiles.com/ijepa/IN1K-vit.h.16-448px-300e.pth.tar",
+        file_name="in1k_ijepa_h16res224.th",
+        preprocess="ijepa",
+    ),
+    "in21k_ijepa_h14": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["h14"], num_cls_tokens=0),
+        url="https://dl.fbaipublicfiles.com/ijepa/IN22K-vit.h.14-900e.pth.tar",
+        file_name="in21k_ijepa_h14.th",
+        preprocess="ijepa",
+    ),
+    "in21k_ijepa_g16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["g16"], num_cls_tokens=0),
+        url="https://dl.fbaipublicfiles.com/ijepa/IN22K-vit.g.16-600e.pth.tar",
+        file_name="in21k_ijepa_g16.th",
+        preprocess="ijepa",
     ),
 }
 
