@@ -263,6 +263,8 @@ TORCHHUB_CONFIGS = {
     "in1k_mae_twob14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="mae_refined_twob14"),
     "in1k_d2v2_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_l16"),
     "in1k_d2v2_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="d2v2_refined_h14"),
+    "in1k_dbot_l16_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="dbot_refined_l16"),
+    "in1k_dbot_h14_refined": dict(repo_or_dir="ml-jku/MIM-Refiner", model="dbot_refined_h14"),
     # DINOv2
     "lvd142m_dinov2_vits14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vits14"),
     "lvd142m_dinov2_vitb14": dict(repo_or_dir="facebookresearch/dinov2", model="dinov2_vitb14"),

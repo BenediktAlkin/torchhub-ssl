@@ -25,6 +25,9 @@ ImageNet-1K pre-trained:
     - ViT-B/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_b16")`
     - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_l16")`
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_h14")`
+- [dBOT refined (MIM-Refiner)](https://github.com/ml-jku/MIM-Refiner#pre-trained-models)
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_l16_refined")`
+    - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dbot_h14_refined")`
 - DINO
     - ViT-S/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s16")`
     - ViT-S/8 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dino_s8")`
