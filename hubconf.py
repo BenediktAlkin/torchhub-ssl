@@ -223,6 +223,15 @@ URL_CONFIS = {
         file_name="in1k_maectaug_h14",
         preprocess="maect",
     ),
+    # I-JEPA
+    "in1k_ijepa_h14": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=VIT_CONFIGS["h14"],
+        url="https://dl.fbaipublicfiles.com/ijepa/IN1K-vit.h.14-300e.pth.tar",
+        file_name="in1k_ijepa_h14",
+        preprocess="ijepa",
+        num_cls_tokens=0,
+    ),
 }
 
 TORCHHUB_CONFIGS = {
@@ -322,6 +331,12 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = sd.pop("cls_token")
+    elif preprocess == "ijepa":
+        sd = {k.replace("module.", ""): v for k, v in sd.items()}
+        # convert to kappamodules format (retain spatial dimensions) -> (1, 14, 14, dim)
+        assert "pos_embed" in sd
+        pos_embed = sd.pop("pos_embed")
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
     else:
         raise NotImplementedError
 
