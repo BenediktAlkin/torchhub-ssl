@@ -332,6 +332,7 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         # kappamodules has different key for CLS token
         sd["cls_tokens.tokens"] = sd.pop("cls_token")
     elif preprocess == "ijepa":
+        sd = sd["encoder"]
         sd = {k.replace("module.", ""): v for k, v in sd.items()}
         # convert to kappamodules format (retain spatial dimensions) -> (1, 14, 14, dim)
         assert "pos_embed" in sd
