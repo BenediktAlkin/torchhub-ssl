@@ -12,6 +12,7 @@ class PrenormVit(nn.Module):
             dim,
             depth,
             num_heads,
+            layerscale=None,
             input_shape=(3, 224, 224),
             mlp_hidden_dim=None,
             drop_path_rate=0.,
@@ -26,6 +27,7 @@ class PrenormVit(nn.Module):
         self.dim = dim
         self.depth = depth
         self.num_heads = num_heads
+        self.layerscale = layerscale
         self.input_shape = input_shape
         self.drop_path_rate = drop_path_rate
         self.drop_path_decay = drop_path_decay
@@ -58,6 +60,7 @@ class PrenormVit(nn.Module):
                 dim=dim,
                 num_heads=num_heads,
                 mlp_hidden_dim=mlp_hidden_dim,
+                layerscale=layerscale,
                 norm_ctor=nn.LayerNorm,
                 drop_path=dpr[i],
                 eps=eps,

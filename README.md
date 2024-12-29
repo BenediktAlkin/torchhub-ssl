@@ -53,6 +53,8 @@ ImageNet-1K pre-trained:
 - [I-JEPA](https://github.com/facebookresearch/ijepa?tab=readme-ov-file#pretrained-models)
     - ViT-H/14 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ijepa_h14")`
     - ViT-H/16_448 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_ijepa_h16res448")`
+- [DINOv2](https://github.com/facebookresearch/dinov2)
+    - ViT-L/16 `model = torch.hub.load("BenediktAlkin/torchhub-ssl", "in1k_dinov2_l16")`
 
 # ImageNet-21K pre-trained
 

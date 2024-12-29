@@ -253,6 +253,14 @@ URL_CONFIS = {
         file_name="in21k_ijepa_g16.th",
         preprocess="ijepa",
     ),
+    # dinov2 reproductions
+    "in1k_dinov2_l16": dict(
+        ctor=PrenormVit,
+        ctor_kwargs=dict(**VIT_CONFIGS["l16"], layerscale=1.0),
+        url="https://huggingface.co/BenediktAlkin/DINOv2/resolve/main/in1k_large16.pth",
+        file_name="in1k_dinov2_large16.pth",
+        preprocess="dinov2",
+    ),
 }
 
 TORCHHUB_CONFIGS = {
@@ -361,6 +369,26 @@ def load_from_url(ctor, ctor_kwargs, url, preprocess, file_name=None, **kwargs):
         assert "pos_embed" in sd
         pos_embed = sd.pop("pos_embed")
         sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+    elif preprocess == "dinov2":
+        sd = sd["teacher"]
+        startswith = "backbone."
+        sd = {
+            key.replace(startswith, ""): value
+            for key, value in sd.items() if key.startswith(startswith)
+        }
+        sd.pop("mask_token")
+        pos_embed = sd.pop("pos_embed")
+        cls = sd.pop("cls_token")
+        sd["cls_tokens.tokens"] = cls + pos_embed[:, :1]
+        pos_embed = pos_embed[:, 1:]
+        sd["pos_embed.embed"] = pos_embed.reshape(*model.pos_embed.embed.shape)
+        for key in list(sd.keys()):
+            # remove chunk index
+            if key.startswith("blocks."):
+                split = key.split(".")
+                del split[1]
+                new_key = ".".join(split)
+                sd[new_key] = sd.pop(key)
     else:
         raise NotImplementedError
 
